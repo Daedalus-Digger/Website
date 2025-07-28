@@ -1,4 +1,4 @@
-name: Deploy to S3
+name: Deploy to Both S3 Buckets & Invalidate CloudFront
 
 on:
   push:
@@ -20,21 +20,30 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Sync files to primary S3 bucket
+      - name: Sync to franklinmccullough42.com
         run: |
           aws s3 sync ./ s3://franklinmccullough42.com/ --delete --exclude ".git/*" --exclude ".github/*"
 
-      - name: Sync files to secondary S3 bucket
+      - name: Sync to www.franklinmccullough42.com
         run: |
           aws s3 sync ./ s3://www.franklinmccullough42.com/ --delete --exclude ".git/*" --exclude ".github/*"
 
-      - name: Invalidate CloudFront cache
-        if: ${{ env.CLOUDFRONT_DISTRIBUTION_ID }}
-        continue-on-error: true
+      - name: Invalidate CloudFront for franklinmccullough42.com
+        if: ${{ secrets.CF_DIST_ROOT }}
         env:
-          CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+          DIST_ID: ${{ secrets.CF_DIST_ROOT }}
         run: |
+          echo "Invalidating CloudFront distribution for root domain..."
           aws cloudfront create-invalidation \
-            --distribution-id $CLOUDFRONT_DISTRIBUTION_ID \
+            --distribution-id "$DIST_ID" \
             --paths "/*"
 
+      - name: Invalidate CloudFront for www.franklinmccullough42.com
+        if: ${{ secrets.CF_DIST_WWW }}
+        env:
+          DIST_ID: ${{ secrets.CF_DIST_WWW }}
+        run: |
+          echo "Invalidating CloudFront distribution for www domain..."
+          aws cloudfront create-invalidation \
+            --distribution-id "$DIST_ID" \
+            --paths "/*"

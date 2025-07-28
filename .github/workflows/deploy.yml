@@ -29,22 +29,21 @@ jobs:
           aws s3 sync ./ s3://www.franklinmccullough42.com/ --delete --exclude ".git/*" --exclude ".github/*"
 
       - name: Invalidate CloudFront for root domain
-          env:
-            DIST_ID: ${{ secrets.CF_DIST_ROOT }}
-          if: env.DIST_ID != ''
-          run: |
-            echo "Invalidating CloudFront distribution for root domain..."
-            aws cloudfront create-invalidation \
-              --distribution-id "$DIST_ID" \
-              --paths "/*"
-
+        if: env.DIST_ID != ''
+        env:
+          DIST_ID: ${{ secrets.CF_DIST_ROOT }}
+        run: |
+          echo "Invalidating CloudFront distribution for root domain..."
+          aws cloudfront create-invalidation \
+            --distribution-id "$DIST_ID" \
+            --paths "/*"
 
       - name: Invalidate CloudFront for www domain
-          env:
-            DIST_ID: ${{ secrets.CF_DIST_WWW }}
-          if: env.DIST_ID != ''
-          run: |
-            echo "Invalidating CloudFront distribution for www domain..."
-            aws cloudfront create-invalidation \
-              --distribution-id "$DIST_ID" \
-              --paths "/*"
+        if: env.DIST_ID != ''
+        env:
+          DIST_ID: ${{ secrets.CF_DIST_WWW }}
+        run: |
+          echo "Invalidating CloudFront distribution for www domain..."
+          aws cloudfront create-invalidation \
+            --distribution-id "$DIST_ID" \
+            --paths "/*"

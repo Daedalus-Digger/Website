@@ -20,9 +20,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Sync files to S3
+      - name: Sync files to primary S3 bucket
         run: |
           aws s3 sync ./ s3://franklinmccullough42.com/ --delete --exclude ".git/*" --exclude ".github/*"
+
+      - name: Sync files to secondary S3 bucket
+        run: |
+          aws s3 sync ./ s3://www.franklinmccullough42.com/ --delete --exclude ".git/*" --exclude ".github/*"
 
       - name: Invalidate CloudFront cache
         if: ${{ env.CLOUDFRONT_DISTRIBUTION_ID }}

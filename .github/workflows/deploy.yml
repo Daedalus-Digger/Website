@@ -25,6 +25,6 @@ jobs:
           aws s3 sync ./ s3://your-s3-bucket-name/ --delete --exclude ".git/*" --exclude ".github/*"
 
       - name: Invalidate CloudFront cache (optional)
-        if: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+        if: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID != '' }}
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"

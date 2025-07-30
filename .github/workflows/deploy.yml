@@ -22,6 +22,9 @@ jobs:
       - name: Run Snyk Code Scan
         run: snyk code test --severity-threshold=high
 
+      - name: Monitor Project on Snyk Dashboard
+        run: snyk monitor
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:

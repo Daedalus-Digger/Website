@@ -20,7 +20,7 @@ jobs:
         run: snyk auth ${{ secrets.SNYK_TOKEN }}
 
       - name: Run Snyk Code Scan
-        run: snyk code test --severity-threshold=high --project-name="Website"
+        run: snyk code test --severity-threshold=high --project-name="Website" --report
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4

@@ -139,7 +139,29 @@
         <li><a href="Blog.html">Blog</a></li>
     </ul>
   </nav>
+  <main class="container">
+    <article class="post">
+      <h2>Welcome to My Blog</h2>
+      <p><small>Posted on July 31, 2025</small></p>
+      <p>This blog is part of my AWS-powered static website. Here I’ll share projects, thoughts, and updates on my cloud and development journey.</p>
+    </article>
 
+    <article class="post">
+      <h2>Using Node.js with MongoDB in AWS</h2>
+      <p><small>Posted on July 28, 2025</small></p>
+      <p>I will integrated MongoDB Atlas with my serverless backend using AWS Lambda and API Gateway. My blog will support dynamic comments!</p>
+    </article>
+
+    <section class="comment-section">
+      <h3>Leave a Comment</h3>
+      <form id="comment-form">
+        <textarea name="comment" required placeholder="Write your comment..."></textarea>
+        <button type="submit">Post Comment</button>
+      </form>
+      <p id="comment-status"></p>
+    </section>
+  </main>
+  
   Copyright &copy; 2025 Franklin McCullough<br>
     <a href="mailto:fmccull2@gmail.com">fmccull2@gmail.com</a>
     </footer>

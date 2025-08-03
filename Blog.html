@@ -169,20 +169,26 @@
     </footer>
   <script>
   async function loadComments() {
-    const res = await fetch("https://q67r5bzead.execute-api.us-east-1.amazonaws.com/comment");
-    if (!res.ok) return;
+  const res = await fetch("https://q67r5bzead.execute-api.us-east-1.amazonaws.com/comment");
+  if (!res.ok) return;
 
-    const data = await res.json();
-    const commentsList = document.getElementById("comments-list");
-    commentsList.innerHTML = ""; // clear old comments
+  const raw = await res.json();
+  const data = typeof raw.body === "string" ? JSON.parse(raw.body) : raw;
 
-    data.comments.forEach(c => {
-      const li = document.createElement("li");
-      li.textContent = `${c.comment} (${new Date(c.createdAt).toLocaleString()})`;
-      commentsList.appendChild(li);
-    });
-  }
+  const commentsList = document.getElementById("comments-list");
+  commentsList.innerHTML = ""; // Clear previous comments
 
+  // Sort by createdAt (newest first) and take top 5
+  const latestComments = data.comments
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 5);
+
+  latestComments.forEach(c => {
+    const li = document.createElement("li");
+    li.textContent = `${c.comment} (${new Date(c.createdAt).toLocaleString()})`;
+    commentsList.appendChild(li);
+  });
+}
   // Call it when the page loads
   window.onload = loadComments;
 </script>

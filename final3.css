@@ -188,6 +188,10 @@ form{display:flex;
 	transform: rotate(180deg);
 	transition: 2s;
   }
+#comments-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ccc;
+}
 
 
 

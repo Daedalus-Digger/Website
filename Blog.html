@@ -153,6 +153,8 @@
     </article>
 
     <section class="comment-section">
+      <h3>Previous Comments</h3>
+        <ul id="comments-list"></ul>
       <h3>Leave a Comment</h3>
       <form id="comment-form">
         <textarea name="comment" required placeholder="Write your comment..."></textarea>
@@ -165,6 +167,26 @@
     Copyright &copy; 2025 Franklin McCullough<br>
     <a href="mailto:fmccull2@gmail.com">fmccull2@gmail.com</a>
     </footer>
+  <script>
+  async function loadComments() {
+    const res = await fetch("https://q67r5bzead.execute-api.us-east-1.amazonaws.com/comment");
+    if (!res.ok) return;
+
+    const data = await res.json();
+    const commentsList = document.getElementById("comments-list");
+    commentsList.innerHTML = ""; // clear old comments
+
+    data.comments.forEach(c => {
+      const li = document.createElement("li");
+      li.textContent = `${c.comment} (${new Date(c.createdAt).toLocaleString()})`;
+      commentsList.appendChild(li);
+    });
+  }
+
+  // Call it when the page loads
+  window.onload = loadComments;
+</script>
+
   <script>
     document.getElementById("comment-form").onsubmit = async function (e) {
       e.preventDefault();
